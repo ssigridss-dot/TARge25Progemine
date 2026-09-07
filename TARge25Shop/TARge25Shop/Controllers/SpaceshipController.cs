@@ -2,7 +2,7 @@
 
 namespace TARge25Shop.Controllers
 {
-    public class HomeController1 : Controller
+    public class SpaceshipController : Controller
     {
         public IActionResult Index()
         {
