@@ -1,2 +1,16 @@
-﻿
-test
+﻿@model TARge25Shop.Models.SpaceshipCreateViewModel
+
+<div>
+    <a asp-action="create" asp-controller="spaceship" type="submit" class="btn btn-primary">Create</a>
+</div>
+
+<div>
+    Spaceship Create
+</div>
+<form method="post" enctype="multipart/form-data">
+    <input asp-for="Id" type="hidden"/>
+    <input asp-for="CreatedAt" type="hidden"/>
+    <input asp-for="UpdatedAt" type="hidden"/>
+
+
+</form>
