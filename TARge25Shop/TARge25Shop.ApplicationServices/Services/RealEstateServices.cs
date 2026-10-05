@@ -12,10 +12,12 @@ namespace TARge25Shop.ApplicationServices.Services
         private readonly IFileServices _fileServices;
         public RealEstateServices
             (
-                TARge25ShopContext context
+                TARge25ShopContext context,
+                IFileServices fileServices
             )
         {
             _context = context;
+            _fileServices = fileServices;
         }
 
         public async Task<RealEstate> Create(RealEstateDto dto)

@@ -1,6 +1,6 @@
-﻿namespace TARge25Shop.Views.RealEstate
-{
-    public class _Images
-    {
-    }
-}
+﻿@model TARge25Shop.Models.RealEstate.RealEstateImageViewModel
+
+<div class="form-group row col-sm-4 offset-2">
+    <div>@Model.ImageTitle</div>
+    <img src="@Model.Image" class="img-thumbnail" />
+</div>
