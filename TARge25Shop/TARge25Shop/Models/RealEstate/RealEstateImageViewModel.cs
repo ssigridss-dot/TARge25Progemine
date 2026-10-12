@@ -1,6 +1,6 @@
 ﻿namespace TARge25Shop.Models.RealEstate
 {
-    public class RealEstateImageViewModel
+    public class RealEstateImageViewModel 
     {
         public Guid ImageId { get; set; }
         public string? ImageTitle { get; set; }

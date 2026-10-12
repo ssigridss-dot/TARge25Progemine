@@ -223,7 +223,7 @@ namespace TARge25Shop.Controllers
             //muuta see niimoodi, et pärast pildi kustutamist jääks kasutaja
             //samale kinnisvara detailide lehele, mitte ei suunataks tagasi index lehele
             //return RedirectToAction(nameof(Index));
-            return RedirectToAction(nameof(Update), new { id = realEstateId });
+            return RedirectToAction(nameof(Update), new {id = realEstateId });
         }
 
         private async Task<RealEstateImageViewModel[]> FileFromDatabase(Guid id)
@@ -236,7 +236,7 @@ namespace TARge25Shop.Controllers
                     ImageTitle = y.ImageTitle,
                     ImageData = y.ImageData,
                     RealEstateId = y.RealEstateId,
-                    Image = string.Format("data:image/gif;base64,{0}",
+                    Image = string.Format("data:image/gif;base64,{0}", 
                         Convert.ToBase64String(y.ImageData))
                 }).ToArrayAsync();
         }
