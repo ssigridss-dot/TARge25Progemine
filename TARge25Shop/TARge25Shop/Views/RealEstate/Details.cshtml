@@ -1,4 +1,4 @@
-﻿@model TARge25Shop.Models.RealEstate.RealEstateDetailsViewModel
+﻿﻿@model TARge25Shop.Models.RealEstate.RealEstateDetailsViewModel
 
 <h1>Details</h1>
 
@@ -53,13 +53,12 @@
             @Html.DisplayFor(model => model.ModifiedAt)
         </div>
     </dl>
+
     <dl>
-        <div>
-            @foreach (var images in Model.Images)
-            {
-                <partial name="_Images" model="images" />
-            }
-        </div>
+        @foreach (var images in Model.Images)
+        {
+            <partial name="_Images" model="images" />
+        }
     </dl>
 
     <a asp-action="Index" asp-controller="realEstate" class="btn btn-success">Back</a>

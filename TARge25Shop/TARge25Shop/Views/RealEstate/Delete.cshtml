@@ -1,4 +1,4 @@
-﻿@model TARge25Shop.Models.RealEstate.RealEstateDeleteViewModel
+﻿﻿@model TARge25Shop.Models.RealEstate.RealEstateDeleteViewModel
 
 <h1>Delete</h1>
 
@@ -52,6 +52,13 @@
             <label asp-for="ModifiedAt" class="col-sm-2 col-form-label"></label>
             @Html.DisplayFor(model => model.ModifiedAt)
         </div>
+    </dl>
+
+    <dl>
+        @foreach (var images in Model.Image)
+        {
+            <partial name="_Images" model="images" />
+        }
     </dl>
 
 

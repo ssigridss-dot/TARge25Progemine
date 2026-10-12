@@ -11,16 +11,18 @@ namespace TARge25Shop.Controllers
     {
         private readonly IRealEstateServices _realEstateServices;
         private readonly TARge25ShopContext _context;
-        private readonly IFileServices _fileservices;
+        private readonly IFileServices _fileService;
 
         public RealEstateController
             (
                 IRealEstateServices realEstateServices,
-                TARge25ShopContext context
+                TARge25ShopContext context,
+                IFileServices fileService
             )
         {
             _realEstateServices = realEstateServices;
             _context = context;
+            _fileService = fileService;
         }
 
         public IActionResult Index()
@@ -97,6 +99,7 @@ namespace TARge25Shop.Controllers
             vm.BuildingType = realEstate.BuildingType;
             vm.CreatedAt = realEstate.CreatedAt;
             vm.ModifiedAt = realEstate.ModifiedAt;
+            vm.Image.AddRange(images);
 
             return View("CreateUpdate", vm);
         }
@@ -115,7 +118,7 @@ namespace TARge25Shop.Controllers
                 ModifiedAt = vm.ModifiedAt,
                 Files = vm.Files,
                 Image = vm.Image
-                    .Select()(x => new FileToDatabaseDto
+                    .Select(x => new FileToDatabaseDto
                     {
                         Id = x.ImageId,
                         ImageData = x.ImageData,
@@ -125,14 +128,15 @@ namespace TARge25Shop.Controllers
             };
 
             var result = await _realEstateServices.Update(dto);
-            var realEstaeId = result.Id;
+
+            var realEstateId = result.Id;
 
             if (result == null)
             {
                 return RedirectToAction(nameof(Index));
             }
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Details), new { id = realEstateId });
         }
 
         [HttpGet]
@@ -145,6 +149,8 @@ namespace TARge25Shop.Controllers
                 return NotFound();
             }
 
+            RealEstateImageViewModel[] images = await FileFromDatabase(id);
+
             var vm = new RealEstateDeleteViewModel();
 
             vm.Id = realEstate.Id;
@@ -154,6 +160,7 @@ namespace TARge25Shop.Controllers
             vm.BuildingType = realEstate.BuildingType;
             vm.CreatedAt = realEstate.CreatedAt;
             vm.ModifiedAt = realEstate.ModifiedAt;
+            vm.Image.AddRange(images);
 
             return View(vm);
         }
@@ -198,13 +205,14 @@ namespace TARge25Shop.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RemoveImage(RealEstateImageVievModel vm)
+        public async Task<IActionResult> RemoveImage(RealEstateImageViewModel vm)
         {
             var dto = new FileToDatabaseDto()
             {
                 Id = vm.ImageId
             };
-            var image = await _fileservices.RemoveImageFromDatabase(dto);
+
+            var image = await _fileService.RemoveImageFromDatabase(dto);
 
             var realEstateId = image.RealEstateId;
 
@@ -213,9 +221,9 @@ namespace TARge25Shop.Controllers
                 return RedirectToAction(nameof(Index));
             }
             //muuta see niimoodi, et pärast pildi kustutamist jääks kasutaja
-            //samale kinisvara detailide lehele, mitte ei suunataks tagasi index lehele
+            //samale kinnisvara detailide lehele, mitte ei suunataks tagasi index lehele
             //return RedirectToAction(nameof(Index));
-            return RedirectToAction(nameof(Update), new {id = realEstateId});
+            return RedirectToAction(nameof(Update), new { id = realEstateId });
         }
 
         private async Task<RealEstateImageViewModel[]> FileFromDatabase(Guid id)
