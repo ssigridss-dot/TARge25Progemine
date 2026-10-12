@@ -28,12 +28,12 @@ namespace TARge25Shop.ApplicationServices.Services
         {
             //siin peab tegema vaheinstansi dto ja domain vahel,
             //et andmed liiguvad dto-st domain objekt
-            Spaceship spaceShip = new();
+            Kindergarten kinderGarten = new();
 
             kinderGarten.Id = Guid.NewGuid();
-            kindergarten.GroupName = dto.GroupName;
+            kinderGarten.GroupName = dto.GroupName;
             kinderGarten.ChildrenCount = dto.ChildrenCount;
-            kinderGarten.Name = dto.Name;
+            kinderGarten.KindergartenName = dto.KindergartenName;
             kinderGarten.TeacherName = dto.TeacherName;
             kinderGarten.CreatedAt = DateTime.Now;
             kinderGarten.UpdatedAt = DateTime.Now;
@@ -60,7 +60,7 @@ namespace TARge25Shop.ApplicationServices.Services
             kinderGarten.Id = dto.Id;
             kinderGarten.GroupName = dto.GroupName;
             kinderGarten.ChildrenCount = dto.ChildrenCount;
-            kinderGarten.Name = dto.Name;
+            kinderGarten.KindergartenName = dto.KindergartenName;
             kinderGarten.TeacherName = dto.TeacherName;
             kinderGarten.CreatedAt = dto.CreatedAt;
             kinderGarten.UpdatedAt = DateTime.Now;
@@ -82,7 +82,7 @@ namespace TARge25Shop.ApplicationServices.Services
             return kindergarten;
         }
 
-        public async Task<Kindergaten> Delete(Guid id)
+        public async Task<Kindergarten> Delete(Guid id)
         {
             var result = await _context.Kindergartens
                 .FirstOrDefaultAsync(x => x.Id == id);

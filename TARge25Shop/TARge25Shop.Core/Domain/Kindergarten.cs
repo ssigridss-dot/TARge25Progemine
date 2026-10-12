@@ -1,4 +1,7 @@
 ﻿
+using Microsoft.AspNetCore.Http;
+using TARge25Shop.Core.Dto;
+
 namespace TARge25Shop.Core.Domain
 {
     public class Kindergarten
@@ -9,7 +12,7 @@ namespace TARge25Shop.Core.Domain
         public int ChildrenCount { get; set; }
         public string KindergartenName { get; set; } = string.Empty;
 
-        public int TeacherName { get; set; }
+        public string TeacherName { get; set; } = string.Empty;
 
 
         public DateTime CreatedAt { get; set; }

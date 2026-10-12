@@ -5,7 +5,6 @@ using TARge25Shop.Core.Dto;
 using TARge25Shop.Core.ServiceInterface;
 using TARge25Shop.Data;
 using TARge25Shop.Models.Kindergarten;
-using TARge25Shop.Models.Spaceship;
 
 namespace TARge25Shop.Controllers
 {
@@ -97,7 +96,7 @@ namespace TARge25Shop.Controllers
 
             var images = await _context.FileToApis
                 .Where(x => x.KindergartenId == id)
-                .Select(y => new ImageViewModel
+                .Select(y => new KindergartenImageViewModel
                 {
                     FilePath = y.ExistingFilePath,
                     ImageId = y.Id
@@ -144,7 +143,7 @@ namespace TARge25Shop.Controllers
 
             var images = await _context.FileToApis
                 .Where(x => x.KindergartenId == id)
-                .Select(y => new ImageViewModel
+                .Select(y => new KindergartenImageViewModel
                 {
                     FilePath = y.ExistingFilePath,
                     ImageId = y.Id
