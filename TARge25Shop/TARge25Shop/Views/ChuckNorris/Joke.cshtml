@@ -1,0 +1,66 @@
+﻿@model TARge25Shop.Models.ChuckNorris.ChuckNorrisViewModel
+
+//peate tegema vaate, kus oleks kõik vm muutujad välja toodud
+
+@{
+    short rowNumber = 1;
+}
+
+<div class="container">
+    <h2>Today`s Chuck Norris Joke is:</h2>
+    @* <h2>@Html.DisplayFor(model => model.Categories)</h2> *@
+    <hr />
+    <dl class="row text-dark">
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.CreatedAt)
+        </dd>
+
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.IconUrl)
+        </dt>
+        <dd class="col-sm-9">
+            <img src="@Model.IconUrl"
+                 alt="Chuck Norris icon"
+                 width="100" />
+        </dd>
+
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.UpdatedAt)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.UpdatedAt)
+        </dd>
+
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Url)
+        </dt>
+        <dd class="col-sm-9">
+            <a href="@Model.Url" target="_blank">
+                @Model.Url
+            </a>
+        </dd>
+
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Value)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Value)
+        </dd>
+
+    </dl>
+    <div>
+        <form method="post">
+            <button asp-controller="chuckNorris" asp-action="Joke" class="btn btn-primary">Joke</button>
+        </form>
+    </div>
+</div>
+
+
+
