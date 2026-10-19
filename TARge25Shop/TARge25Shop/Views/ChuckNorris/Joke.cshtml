@@ -1,66 +1,48 @@
 ﻿@model TARge25Shop.Models.ChuckNorris.ChuckNorrisViewModel
 
-//peate tegema vaate, kus oleks kõik vm muutujad välja toodud
-
-@{
-    short rowNumber = 1;
-}
-
 <div class="container">
-    <h2>Today`s Chuck Norris Joke is:</h2>
+    <h2>Today's Chuck Norris Joke is:</h2>
     @* <h2>@Html.DisplayFor(model => model.Categories)</h2> *@
     <hr />
     <dl class="row text-dark">
-        <dd class="col-sm-9">
+        <div class="form-group row">
+            <label asp-for="CreatedAt" class="col-sm-2 col-form-label"></label>
             @Html.DisplayFor(model => model.CreatedAt)
-        </dd>
+        </div>
 
-        <dt class="col-sm-3">
-            @Html.DisplayNameFor(model => model.IconUrl)
-        </dt>
-        <dd class="col-sm-9">
-            <img src="@Model.IconUrl"
-                 alt="Chuck Norris icon"
-                 width="100" />
-        </dd>
+        <div class="form-group row">
+            <label asp-for="IconUrl" class="col-sm-2 col-form-label"></label>
+            @Html.DisplayFor(model => model.IconUrl)
+        </div>
 
-        <dt class="col-sm-3">
-            @Html.DisplayNameFor(model => model.Id)
-        </dt>
-        <dd class="col-sm-9">
+        <div class="form-group row">
+            <label asp-for="Id" class="col-sm-2 col-form-label"></label>
             @Html.DisplayFor(model => model.Id)
-        </dd>
+        </div>
 
-        <dt class="col-sm-3">
-            @Html.DisplayNameFor(model => model.UpdatedAt)
-        </dt>
-        <dd class="col-sm-9">
+        <div class="form-group row">
+            <label asp-for="UpdatedAt" class="col-sm-2 col-form-label"></label>
             @Html.DisplayFor(model => model.UpdatedAt)
-        </dd>
+        </div>
 
-        <dt class="col-sm-3">
-            @Html.DisplayNameFor(model => model.Url)
-        </dt>
-        <dd class="col-sm-9">
-            <a href="@Model.Url" target="_blank">
-                @Model.Url
-            </a>
-        </dd>
+        <div class="form-group row">
+            <label asp-for="Url" class="col-sm-2 col-form-label"></label>
+            @Html.DisplayFor(model => model.Url)
+        </div>
 
-        <dt class="col-sm-3">
-            @Html.DisplayNameFor(model => model.Value)
-        </dt>
-        <dd class="col-sm-9">
+        <div class="form-group row">
+            <label asp-for="Value" class="col-sm-2 col-form-label"></label>
             @Html.DisplayFor(model => model.Value)
-        </dd>
-
+        </div>
     </dl>
+    <hr />
+
     <div>
-        <form method="post">
+        <form method="get">
             <button asp-controller="chuckNorris" asp-action="Joke" class="btn btn-primary">Joke</button>
         </form>
+        <a asp-action="Index" asp-controller="chuckNorris" class="btn btn-success">Back</a>
     </div>
 </div>
-
 
 

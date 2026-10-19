@@ -1,5 +1,4 @@
-﻿
-using System.Text.Json;
+﻿using System.Text.Json;
 using TARge25Shop.Core.Dto;
 using TARge25Shop.Core.ServiceInterface;
 
@@ -16,6 +15,7 @@ namespace TARge25Shop.ApplicationServices.Services
         {
             _httpClient = httpClient;
         }
+
         public async Task<ChuckNorrisRootDto> ChuckNorrisResultHttpClient()
         {
             //var response on vaja ühendada https://api.chucknorris.io/jokes/random
@@ -27,7 +27,7 @@ namespace TARge25Shop.ApplicationServices.Services
 
             var options = new JsonSerializerOptions
             {
-                //olek true laseb ignoreerida täpset tähe suurustundlikkust JSON muutujate nimes
+                //olek true laseb ignoreerida täpset tähe suurustundlikust JSON muutujate nimes
                 PropertyNameCaseInsensitive = true
             };
 
@@ -37,7 +37,5 @@ namespace TARge25Shop.ApplicationServices.Services
             //null andestav operaator(!) on turvaline viis kuna API alati tagastab JSON
             return joke!;
         }
-
-       
     }
 }

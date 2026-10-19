@@ -1,0 +1,25 @@
+﻿@model TARge25Shop.Models.Cocktail.CocktailViewModel
+
+@{
+    ViewData["Title"] = "Margarita Cocktail";
+}
+
+<div class="container mt-4">
+    <h1>@Model.Name</h1>
+
+    <img src="@Model.ImageUrl"
+         alt="@Model.Name"
+         class="img-fluid rounded"
+         style="max-width: 350px;" />
+
+    <h2 class="mt-4">Ingredients</h2>
+
+    <ul>
+        @foreach (var ingredient in Model.Ingredients)
+        {
+            <li>@ingredient</li>
+        }
+    </ul>
+    <h2>Instructions</h2>
+    <p>@Model.Instructions</p>
+</div>
