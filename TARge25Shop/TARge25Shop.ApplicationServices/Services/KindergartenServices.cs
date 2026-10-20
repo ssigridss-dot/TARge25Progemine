@@ -32,9 +32,12 @@ namespace TARge25Shop.ApplicationServices.Services
             kindergarten.UpdatedAt = DateTime.Now;
 
             // Failide salvestamine
-            _fileServices.FilesToApi(dto, kindergarten);
+            if (dto.Files != null)
+            {
+                _fileServices.UploadFilesToDatabase(dto, kindergarten);
+            }
 
-            _context.Kindergartens.Add(kindergarten);
+            await _context.Kindergartens.AddAsync(kindergarten);
             await _context.SaveChangesAsync();
 
             return kindergarten;
@@ -42,23 +45,20 @@ namespace TARge25Shop.ApplicationServices.Services
 
         public async Task<Kindergarten> Update(KindergartenDto dto)
         {
-            // PARANDUS: Otsime olemasoleva kirje andmebaasist üles, et vältida vigu ja säilitada CreatedAt
-            var kindergarten = await _context.Kindergartens
-                .FirstOrDefaultAsync(x => x.Id == dto.Id);
+            Kindergarten kindergarten = new();
 
-            if (kindergarten == null)
-            {
-                return null;
-            }
-
+            kindergarten.Id = dto.Id;
             kindergarten.GroupName = dto.GroupName;
             kindergarten.ChildrenCount = dto.ChildrenCount;
             kindergarten.KindergartenName = dto.KindergartenName;
             kindergarten.TeacherName = dto.TeacherName;
+            kindergarten.CreatedAt = dto.CreatedAt;
             kindergarten.UpdatedAt = DateTime.Now;
 
-            // Uute piltide lisamine, kui neid valiti
-            _fileServices.FilesToApi(dto, kindergarten);
+            if (dto.Files != null)
+            {
+                _fileServices.UploadFilesToDatabase(dto, kindergarten);
+            }
 
             _context.Kindergartens.Update(kindergarten);
             await _context.SaveChangesAsync();
@@ -79,22 +79,14 @@ namespace TARge25Shop.ApplicationServices.Services
             var kindergarten = await _context.Kindergartens
                 .FirstOrDefaultAsync(x => x.Id == id);
 
-            if (kindergarten == null)
-            {
-                return null;
-            }
-
-            // PARANDUS: Leiame üles ka kõik selle lasteaia seotud pildid ja kustutame need kettalt + baasist
-            var images = await _context.FileToApis
+            var images = await _context.FileToDatabases
                 .Where(x => x.KindergartenId == id)
-                .ToArrayAsync();
+                .Select(y => new FileToDatabaseDto
+                {
+                    Id = y.Id
+                }).ToArrayAsync();
 
-            if (images.Length > 0)
-            {
-                // Teisendame FileToApi massiivi FileToApiDto massiiviks, et kasutada Sinu olemasolevat RemoveImagesFromApi meetodit
-                var imageDtos = images.Select(x => new FileToApiDto { Id = x.Id }).ToArray();
-                await _fileServices.RemoveImagesFromApi(imageDtos);
-            }
+            await _fileServices.RemoveImagesFromDatabase(images);
 
             _context.Kindergartens.Remove(kindergarten);
             await _context.SaveChangesAsync();
