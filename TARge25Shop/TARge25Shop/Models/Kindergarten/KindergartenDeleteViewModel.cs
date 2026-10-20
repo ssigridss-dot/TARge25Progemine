@@ -1,7 +1,4 @@
-﻿using TARge25Shop.Core.Dto;
-using TARge25Shop.Models.Kindergarten;
-
-namespace TARge25Shop.Models.Kindergarten
+﻿namespace TARge25Shop.Models.Kindergarten
 {
     public class KindergartenDeleteViewModel
     {

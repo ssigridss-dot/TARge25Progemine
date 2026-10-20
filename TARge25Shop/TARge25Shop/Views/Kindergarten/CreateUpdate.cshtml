@@ -2,15 +2,11 @@
 
 @if (Model.Id.HasValue)
 {
-    <h1>
-        Update
-    </h1>
+    <h1>Update</h1>
 }
 else
 {
-    <h1>
-        Create
-    </h1>
+    <h1>Create</h1>
 }
 
 <form method="post" enctype="multipart/form-data">
@@ -55,23 +51,27 @@ else
         </div>
     </div>
 
-
     @foreach (var images in Model.Image)
     {
         <partial name="_Images" model="images" />
-        <input asp-action="removeImage" asp-controller="kindergarten" asp-route-imageId="@images.ImageId" type="submit" class="btn btn-danger" value="Remove Image" />
+        <!-- Parandus: lisatud formnovalidate, et pildi kustutamisel ei nõutaks vormi täitmist -->
+        <input asp-action="RemoveImage" asp-controller="Kindergarten" 
+               asp-route-imageId="@images.ImageId" 
+               asp-route-kindergartenId="@Model.Id" 
+               type="submit" class="btn btn-danger mb-3" value="Remove Image" formnovalidate />
     }
+    
     <hr />
     <br />
 
     @if (Model.Id.HasValue)
     {
-        <input asp-action="update" asp-controller="kindergarten" type="submit" class="btn btn-success" value="Update" />
+        <input asp-action="Update" asp-controller="Kindergarten" type="submit" class="btn btn-success" value="Update" />
     }
     else
     {
-        <input asp-action="create" asp-controller="kindergarten" type="submit" class="btn btn-success" value="Create" />
+        <input asp-action="Create" asp-controller="Kindergarten" type="submit" class="btn btn-success" value="Create" />
     }
 
-    <a asp-action="Index" asp-controller="kindergarten" class="btn btn-secondary">Back to List</a>
+    <a asp-action="Index" asp-controller="Kindergarten" class="btn btn-secondary">Back to List</a>
 </form>

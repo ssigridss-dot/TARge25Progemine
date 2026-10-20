@@ -5,7 +5,6 @@ using TARge25Shop.Core.Dto;
 using TARge25Shop.Core.ServiceInterface;
 using TARge25Shop.Data;
 
-
 namespace TARge25Shop.ApplicationServices.Services
 {
     public class FileServices : IFileServices
@@ -58,7 +57,7 @@ namespace TARge25Shop.ApplicationServices.Services
                         };
 
                         //tuleb lisada context construktorisse
-                        _context.FileToApis.AddAsync(path);
+                        _context.FileToApis.Add(path);
                     }
                 }
             }
@@ -98,7 +97,7 @@ namespace TARge25Shop.ApplicationServices.Services
                         };
 
                         //tuleb lisada context construktorisse
-                        _context.FileToApis.AddAsync(path);
+                        _context.FileToApis.Add(path);
                     }
                 }
             }
@@ -109,6 +108,11 @@ namespace TARge25Shop.ApplicationServices.Services
             //kui soovin kustutada faili, siis pean läbi Id pildi ülesse otsima
             var imageId = await _context.FileToApis
                 .FirstOrDefaultAsync(x => x.Id == dto.Id);
+
+            if (imageId == null)
+            {
+                return null;
+            }
 
             //teha muutuja filePath, mis näitab failide asukohta
             var filePath = _webHost.ContentRootPath + "\\wwwroot\\multipleFileUpload\\"
@@ -137,20 +141,23 @@ namespace TARge25Shop.ApplicationServices.Services
                 var imageId = await _context.FileToApis
                     .FirstOrDefaultAsync(x => x.Id == dto.Id);
 
-                //teha muutuja filePath, mis näitab failide asukohta
-                var filePath = _webHost.ContentRootPath + "\\wwwroot\\multipleFileUpload\\"
-                    + imageId.ExistingFilePath;
-
-                //kui fail asub selles kaustas, siis kustuta
-                if (File.Exists(filePath))
+                if (imageId != null)
                 {
-                    File.Delete(filePath);
-                }
+                    //teha muutuja filePath, mis näitab failide asukohta
+                    var filePath = _webHost.ContentRootPath + "\\wwwroot\\multipleFileUpload\\"
+                        + imageId.ExistingFilePath;
 
-                _context.FileToApis.Remove(imageId);
-                await _context.SaveChangesAsync();
+                    //kui fail asub selles kaustas, siis kustuta
+                    if (File.Exists(filePath))
+                    {
+                        File.Delete(filePath);
+                    }
+
+                    _context.FileToApis.Remove(imageId);
+                }
             }
 
+            await _context.SaveChangesAsync();
             return null;
         }
     }

@@ -1,5 +1,4 @@
-﻿using TARge25Shop.Core.Dto;
-using TARge25Shop.Models.Kindergarten;
+﻿using Microsoft.AspNetCore.Http;
 
 namespace TARge25Shop.Models.Kindergarten
 {
@@ -12,7 +11,9 @@ namespace TARge25Shop.Models.Kindergarten
         public string KindergartenName { get; set; } = string.Empty;
 
         public string TeacherName { get; set; } = string.Empty;
-        public List<IFormFile> Files { get; set; }
+
+        // Lisatud puuduv using ja turvaline algväärtustamine
+        public List<IFormFile> Files { get; set; } = new List<IFormFile>();
 
         public List<KindergartenImageViewModel> Image { get; set; }
                     = new List<KindergartenImageViewModel>();
