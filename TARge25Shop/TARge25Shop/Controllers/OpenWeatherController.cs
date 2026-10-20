@@ -23,8 +23,13 @@ namespace TARge25Shop.Controllers
             return View();
         }
 
+        public OpenWeatherService Get_openWeatherService1()
+        {
+            return _openWeatherService;
+        }
+
         [HttpPost]
-        public async Task<IActionResult> Index(string city)
+        public async Task<IActionResult> Index(string city, OpenWeatherService _openWeatherService1)
         {
             if (string.IsNullOrWhiteSpace(city))
             {
