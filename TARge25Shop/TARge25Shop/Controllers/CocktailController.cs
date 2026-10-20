@@ -13,53 +13,47 @@ namespace TARge25Shop.Controllers
             _cocktailServices = cocktailServices;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return await Cocktail();
+            return View();
         }
 
         [HttpGet]
-        public async Task<IActionResult> Cocktail()
+        public async Task<IActionResult> Search(string name)
         {
-            var result =
-                await _cocktailServices.CocktailResultHttpClient();
-
-            var drink = result.Drinks?.FirstOrDefault();
-
-            if (drink == null)
+            if (string.IsNullOrWhiteSpace(name))
             {
-                return NotFound("Margarita kokteili ei leitud.");
+                return View("Index");
             }
 
-            CocktailViewModel vm = new()
+            var cocktails =
+                await _cocktailServices.CocktailResultHttpClient(name);
+
+            var vm = new CocktailSearchViewModel
             {
-                Name = drink.Name,
-                ImageUrl = drink.ImageUrl,
-                Instructions = drink.Instructions,
-                Ingredients = new[]
-                {
-                    drink.Ingredient1,
-                    drink.Ingredient2,
-                    drink.Ingredient3,
-                    drink.Ingredient4,
-                    drink.Ingredient5,
-                    drink.Ingredient6,
-                    drink.Ingredient7,
-                    drink.Ingredient8,
-                    drink.Ingredient9,
-                    drink.Ingredient10,
-                    drink.Ingredient11,
-                    drink.Ingredient12,
-                    drink.Ingredient13,
-                    drink.Ingredient14,
-                    drink.Ingredient15
-                }
-                .Where(x => !string.IsNullOrWhiteSpace(x))
-                .Select(x => x!)
-                .ToList()
+                SearchName = name,
+                Cocktails = cocktails.Drinks?
+                    .Select(c => new CocktailViewModel
+                    {
+                        Id = c.IdDrink,
+                        Name = c.StrDrink,
+                        Category = c.StrCategory,
+                        Instructions = c.StrInstructions,
+                        ImageUrl = c.StrDrinkThumb,
+                        Glass = c.StrGlass,
+                        Ingredient1 = c.StrIngredient1,
+                        Ingredient2 = c.StrIngredient2,
+                        Ingredient3 = c.StrIngredient3,
+                        Ingredient4 = c.StrIngredient4,
+                        Measure1 = c.StrMeasure1,
+                        Measure2 = c.StrMeasure2,
+                        Measure3 = c.StrMeasure3,
+                        Measure4 = c.StrMeasure4
+                    })
+                    .ToList() ?? new List<CocktailViewModel>()
             };
 
-            return View("Cocktail", vm);
+            return View("Search", vm);
         }
     }
 }

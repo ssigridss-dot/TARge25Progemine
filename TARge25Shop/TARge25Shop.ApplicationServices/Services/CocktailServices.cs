@@ -13,12 +13,11 @@ namespace TARge25Shop.ApplicationServices.Services
             _httpClient = httpClient;
         }
 
-        public async Task<CocktailRootDto> CocktailResultHttpClient()
+        public async Task<CocktailRootDto> CocktailResultHttpClient(string name)
         {
-            var response = await _httpClient.GetAsync(
-                "https://www.thecocktaildb.com/api/json/v1/1/search.php?s=margarita"
-            );
+            var url = $"https://www.thecocktaildb.com/api/json/v1/1/search.php?s={Uri.EscapeDataString(name)}";
 
+            var response = await _httpClient.GetAsync(url);
             response.EnsureSuccessStatusCode();
 
             var json = await response.Content.ReadAsStringAsync();
@@ -29,11 +28,9 @@ namespace TARge25Shop.ApplicationServices.Services
             };
 
             var cocktail = JsonSerializer.Deserialize<CocktailRootDto>(
-                json, options
-            );
+                json, options);
 
-            return cocktail
-                ?? throw new Exception("Cocktail API ei tagastanud andmeid.");
+            return cocktail!;
         }
     }
 }
