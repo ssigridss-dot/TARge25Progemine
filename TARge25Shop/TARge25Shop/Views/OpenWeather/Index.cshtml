@@ -1,0 +1,73 @@
+﻿@model TARge25Shop.Models.OpenWeatherViewModel
+
+@{
+    ViewData["Title"] = "OpenWeather";
+}
+
+<div class="container mt-4">
+    <h1>Ilmaennustus</h1>
+
+    <p>Sisesta linna nimi ja vaata praegust ilma.</p>
+
+    <form asp-controller="OpenWeather"
+          asp-action="Index"
+          method="post">
+
+        <div class="mb-3">
+            <label for="city" class="form-label">
+                Linna nimi
+            </label>
+
+            <input type="text"
+                   id="city"
+                   name="city"
+                   class="form-control"
+                   placeholder="Näiteks Tallinn"
+                   required />
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            Vaata ilma
+        </button>
+    </form>
+
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger mt-3">
+            @ViewBag.Error
+        </div>
+    }
+
+    @if (Model != null)
+    {
+        <div class="card mt-4" style="max-width: 450px;">
+            <div class="card-body">
+                <h2 class="card-title">@Model.City</h2>
+
+                <h3>
+                    @Model.Main.Temperature.ToString("0.0") °C
+                </h3>
+
+                <p>
+                    <strong>Ilm:</strong>
+                    @Model.Weather.FirstOrDefault()?.Description
+                </p>
+
+                <p>
+                    <strong>Tajutav temperatuur:</strong>
+                    @Model.Main.FeelsLike.ToString("0.0") °C
+                </p>
+
+                <p>
+                    <strong>Õhuniiskus:</strong>
+                    @Model.Main.Humidity%
+                </p>
+
+                <p>
+                    <strong>Tuule kiirus:</strong>
+                    @Model.Wind.Speed m/s
+                </p>
+            </div>
+        </div>
+    }
+</div>
