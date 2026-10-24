@@ -34,7 +34,7 @@ namespace TARge25Shop.ApplicationServices.Services
             // Failide salvestamine
             if (dto.Files != null)
             {
-                _fileServices.UploadFilesToDatabase(dto, kindergarten);
+                await _fileServices.UploadFilesToDatabase(dto, kindergarten);
             }
 
             await _context.Kindergartens.AddAsync(kindergarten);
@@ -57,7 +57,7 @@ namespace TARge25Shop.ApplicationServices.Services
 
             if (dto.Files != null)
             {
-                _fileServices.UploadFilesToDatabase(dto, kindergarten);
+                await _fileServices.UploadFilesToDatabase(dto, kindergarten);
             }
 
             _context.Kindergartens.Update(kindergarten);

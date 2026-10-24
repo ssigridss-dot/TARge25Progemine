@@ -121,7 +121,7 @@ namespace TARge25Shop.ApplicationServices.Services
             return null;
         }
 
-        public void UploadFilesToDatabase(KindergartenDto dto, Kindergarten domain)
+        public async Task UploadFilesToDatabase(KindergartenDto dto, Kindergarten domain)
         {
             // Toimub kontroll, kas on faile või ei ole
             if (dto.Files != null && dto.Files.Count > 0)
@@ -142,7 +142,7 @@ namespace TARge25Shop.ApplicationServices.Services
                         file.CopyTo(target);
                         files.ImageData = target.ToArray();
 
-                        _context.FileToDatabases.AddAsync(files);
+                        await _context.FileToDatabases.AddAsync(files);
                     }
                 }
             }
