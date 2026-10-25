@@ -1,48 +1,34 @@
-﻿using System.Text.Json;
-using Microsoft.Extensions.Configuration;
+﻿using System.Net.Http;
+using System.Net.Http.Json;
+using System.Threading.Tasks;
+using TARge25Shop.Core.Dto;
+using TARge25Shop.Core.ServiceInterface;
 
 namespace TARge25Shop.ApplicationServices.Services
 {
-    public class OpenWeatherService
+    public class OpenWeatherServices : IOpenWeatherServices
     {
         private readonly HttpClient _httpClient;
-        private readonly IConfiguration _configuration;
+        private const string ApiKey = "43b8f2310550b2d16ad26ec5101a9e87";
 
-        public OpenWeatherService(
-            HttpClient httpClient,
-            IConfiguration configuration)
+        public OpenWeatherServices(HttpClient httpClient)
         {
             _httpClient = httpClient;
-            _configuration = configuration;
         }
 
-        public async Task<OpenWeatherViewModel?> GetWeatherAsync(string city)
+        public async Task<OpenWeatherDto> GetWeatherAsync(string cityName)
         {
-            string? apiKey =
-                _configuration["OpenWeather:ApiKey"];
+            string url = $"https://api.openweathermap.org/data/2.5/weather?q={cityName}&appid={ApiKey}&units=metric";
 
-            if (string.IsNullOrWhiteSpace(apiKey))
+            try
             {
-                throw new InvalidOperationException(
-                    "OpenWeather API võti puudub.");
+                var response = await _httpClient.GetFromJsonAsync<OpenWeatherDto>(url);
+                return response;
             }
-
-            string url =
-                "https://api.openweathermap.org/data/2.5/weather" +
-                $"?q={Uri.EscapeDataString(city)}" +
-                $"&appid={Uri.EscapeDataString(apiKey)}" +
-                "&units=metric&lang=et";
-
-            using HttpResponseMessage response =
-                await _httpClient.GetAsync(url);
-
-            response.EnsureSuccessStatusCode();
-
-            string json =
-                await response.Content.ReadAsStringAsync();
-
-            return JsonSerializer.Deserialize<OpenWeatherViewModel>(
-                json);
+            catch
+            {
+                return null; // Kui linna ei leita või tekib viga
+            }
         }
     }
 }

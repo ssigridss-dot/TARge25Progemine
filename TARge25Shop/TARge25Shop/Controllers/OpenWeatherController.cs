@@ -1,20 +1,16 @@
-﻿
-using System;
-using System.Net.Http;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using TARge25Shop.ApplicationServices.Services;
+using TARge25Shop.Core.ServiceInterface;
 
 namespace TARge25Shop.Controllers
 {
     public class OpenWeatherController : Controller
     {
-        private readonly OpenWeatherService _openWeatherService;
+        private readonly IOpenWeatherServices _openWeatherServices;
 
-        public OpenWeatherController(
-            OpenWeatherService openWeatherService)
+        public OpenWeatherController(IOpenWeatherServices openWeatherServices)
         {
-            _openWeatherService = openWeatherService;
+            _openWeatherServices = openWeatherServices;
         }
 
         [HttpGet]
@@ -23,46 +19,24 @@ namespace TARge25Shop.Controllers
             return View();
         }
 
-        public OpenWeatherService Get_openWeatherService1()
-        {
-            return _openWeatherService;
-        }
-
         [HttpPost]
-        public async Task<IActionResult> Index(string city, OpenWeatherService _openWeatherService1)
+        public async Task<IActionResult> Index(string cityName)
         {
-            if (string.IsNullOrWhiteSpace(city))
+            if (string.IsNullOrWhiteSpace(cityName))
             {
-                ViewBag.Error = "Palun sisesta linna nimi.";
+                ModelState.AddModelError("", "Sisesta linna nimi");
                 return View();
             }
 
-            try
+            var result = await _openWeatherServices.GetWeatherAsync(cityName);
+
+            if (result == null)
             {
-                var weather =
-                    await _openWeatherService.GetWeatherAsync(city);
-
-                if (weather == null)
-                {
-                    ViewBag.Error = "Ilmaandmeid ei õnnestunud lugeda.";
-                    return View();
-                }
-
-                return View(weather);
-            }
-            catch (HttpRequestException)
-            {
-                ViewBag.Error =
-                    "Ilma laadimine ebaõnnestus. " +
-                    "Kontrolli linna nime, API võtit ja internetiühendust.";
-
+                ModelState.AddModelError("", "Linna ei leitud või API päring ebaõnnestus.");
                 return View();
             }
-            catch (InvalidOperationException ex)
-            {
-                ViewBag.Error = ex.Message;
-                return View();
-            }
+
+            return View(result);
         }
     }
 }

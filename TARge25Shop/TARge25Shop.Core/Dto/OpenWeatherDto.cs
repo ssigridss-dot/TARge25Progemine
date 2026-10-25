@@ -1,10 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace TARge25Shop.Core.Dto
 {
-    internal class OpenWeatherDto
+    public class OpenWeatherDto
     {
+        public string Name { get; set; }
+        public MainDto Main { get; set; }
+        public WindDto Wind { get; set; }
+        public List<WeatherDto> Weather { get; set; }
+    }
+
+    public class MainDto
+    {
+        public double Temp { get; set; }
+        public double Feels_Like { get; set; }
+        public int Humidity { get; set; }
+    }
+
+    public class WindDto
+    {
+        public double Speed { get; set; }
+    }
+
+    public class WeatherDto
+    {
+        public string Description { get; set; }
     }
 }

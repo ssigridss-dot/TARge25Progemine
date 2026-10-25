@@ -1,6 +1,10 @@
-﻿namespace TARge25Shop.Core.ServiceInterface
+﻿using System.Threading.Tasks;
+using TARge25Shop.Core.Dto;
+
+namespace TARge25Shop.Core.ServiceInterface
 {
-    public class IOpenWeatherServices
+    public interface IOpenWeatherServices
     {
+        Task<OpenWeatherDto> GetWeatherAsync(string cityName);
     }
 }
