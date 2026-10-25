@@ -5,7 +5,6 @@ using TARge25Shop.Core.Dto;
 using TARge25Shop.Core.ServiceInterface;
 using TARge25Shop.Data;
 
-
 namespace TARge25Shop.ApplicationServices.Services
 {
     public class FileServices : IFileServices
@@ -58,7 +57,7 @@ namespace TARge25Shop.ApplicationServices.Services
                         };
 
                         //tuleb lisada context construktorisse
-                        _context.FileToApis.AddAsync(path);
+                        _context.FileToApis.Add(path);
                     }
                 }
             }
@@ -69,6 +68,11 @@ namespace TARge25Shop.ApplicationServices.Services
             //kui soovin kustutada faili, siis pean läbi Id pildi ülesse otsima
             var imageId = await _context.FileToApis
                 .FirstOrDefaultAsync(x => x.Id == dto.Id);
+
+            if (imageId == null)
+            {
+                return null;
+            }
 
             //teha muutuja filePath, mis näitab failide asukohta
             var filePath = _webHost.ContentRootPath + "\\wwwroot\\multipleFileUpload\\"
@@ -97,77 +101,79 @@ namespace TARge25Shop.ApplicationServices.Services
                 var imageId = await _context.FileToApis
                     .FirstOrDefaultAsync(x => x.Id == dto.Id);
 
-                //teha muutuja filePath, mis näitab failide asukohta
-                var filePath = _webHost.ContentRootPath + "\\wwwroot\\multipleFileUpload\\"
-                    + imageId.ExistingFilePath;
-
-                //kui fail asub selles kaustas, siis kustuta
-                if (File.Exists(filePath))
+                if (imageId != null)
                 {
-                    File.Delete(filePath);
-                }
+                    //teha muutuja filePath, mis näitab failide asukohta
+                    var filePath = _webHost.ContentRootPath + "\\wwwroot\\multipleFileUpload\\"
+                        + imageId.ExistingFilePath;
 
-                _context.FileToApis.Remove(imageId);
-                await _context.SaveChangesAsync();
+                    //kui fail asub selles kaustas, siis kustuta
+                    if (File.Exists(filePath))
+                    {
+                        File.Delete(filePath);
+                    }
+
+                    _context.FileToApis.Remove(imageId);
+                }
             }
 
+            await _context.SaveChangesAsync();
             return null;
         }
 
-        public void UploadFilesToDatabase(RealEstateDto dto, RealEstate domain)
+        public async Task UploadFilesToDatabase(KindergartenDto dto, Kindergarten domain)
         {
-            //toimub kontroll, kas on faile v]i ei ole
+            // Toimub kontroll, kas on faile või ei ole
             if (dto.Files != null && dto.Files.Count > 0)
             {
-                //tuleb kasutada foreachi, et mitu faili ülesse laadida
+                // Tuleb kasutada foreachi, et mitu faili ülesse laadida
                 foreach (var file in dto.Files)
                 {
-                    //teha muutuja, mis salvestab faili sisu
+                    //teha muutuja, mis salvestab faili nime
                     using (var target = new MemoryStream())
                     {
                         FileToDatabase files = new FileToDatabase()
                         {
                             Id = Guid.NewGuid(),
                             ImageTitle = file.FileName,
-                            RealEstateId = domain.Id
+                            KindergartenId = domain.Id
                         };
 
                         file.CopyTo(target);
                         files.ImageData = target.ToArray();
 
-                        _context.FileToDatabases.AddAsync(files);
+                        await _context.FileToDatabases.AddAsync(files);
                     }
                 }
             }
         }
 
+        public async Task<FileToDatabase> RemoveImagesFromDatabase(FileToDatabaseDto[] dtos)
+        {
+            foreach (var dto in dtos)
+            {
+                var imageId = await _context.FileToDatabases
+                    .Where(x => x.Id == dto.Id)
+                    .FirstOrDefaultAsync(x => x.Id == dto.Id);
+
+                _context.FileToDatabases.Remove(imageId);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return null;
+        }
+
         public async Task<FileToDatabase> RemoveImageFromDatabase(FileToDatabaseDto dto)
         {
             var image = await _context.FileToDatabases
-                .Where(x => x.Id == dto.Id)
-                .FirstOrDefaultAsync();
+                 .Where(x => x.Id == dto.Id)
+                 .FirstOrDefaultAsync();
 
             _context.FileToDatabases.Remove(image);
             await _context.SaveChangesAsync();
 
             return image;
-        }
-
-
-        //teha parandus, et siin ei oleks return null
-        public async Task<FileToDatabase> RemoveImagesFromDatabase(FileToDatabaseDto[] dtos)
-        {
-            foreach (var dto in dtos)
-            {
-                var image = await _context.FileToDatabases
-                    .Where(x => x.Id == dto.Id)
-                    .FirstOrDefaultAsync();
-
-                _context.FileToDatabases.Remove(image);
-            }
-            await _context.SaveChangesAsync();
-
-            return null;
         }
     }
 }
