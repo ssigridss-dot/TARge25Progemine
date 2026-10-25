@@ -51,15 +51,21 @@ else
         </div>
     </div>
 
-    @foreach (var images in Model.Image)
-    {
-        <partial name="_Images" model="images" />
-        <!-- Parandus: lisatud formnovalidate, et pildi kustutamisel ei nõutaks vormi täitmist -->
-        <input asp-action="RemoveImage" asp-controller="Kindergarten" 
-               asp-route-imageId="@images.ImageId" 
-               asp-route-kindergartenId="@Model.Id" 
-               type="submit" class="btn btn-danger mb-3" value="Remove Image" formnovalidate />
-    }
+    <div class="mb-3">
+        @foreach (var image in Model.Image)
+        {
+            <div class="mb-3">
+                <partial name="_Images" model="image" />
+                <br />
+                <button type="submit" asp-action="removeImage" asp-controller="kindergarten"
+                        asp-route-imageId="@image.ImageId"
+                        asp-route-kindergartenId="@Model.Id"
+                        class="btn btn-danger btn-sm mt-2" formnovalidate>
+                    Remove Image
+                </button>
+            </div>
+        }
+    </div>
     
     <hr />
     <br />
