@@ -2,15 +2,11 @@
 
 @if (Model.Id.HasValue)
 {
-    <h1>
-        Update
-    </h1>
+    <h1>Update</h1>
 }
 else
 {
-    <h1>
-        Create
-    </h1>
+    <h1>Create</h1>
 }
 
 <form method="post" enctype="multipart/form-data">
@@ -47,30 +43,41 @@ else
     </div>
 
     <div class="form-group row">
-        <label asp-for="Files" class="control-label"></label>
-        <input asp-for="Files" multiple type="file" class="form-control" />
+        <label asp-for="Files" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-5">
+            <div class="custom-file">
+                <input class="form-control" asp-for="Files" multiple type="file" />
+            </div>
+        </div>
     </div>
 
-    <div>
-        @foreach(var image in Model.Image)
+    <div class="mb-3">
+        @foreach (var image in Model.Image)
         {
-            <partial name="_Images" model="image" />
-            <input asp-action="removeImage" asp-controller="kindergarten" asp-route-imageId="@image.ImageId" 
-                   asp-route-kindergartenId="@Model.Id" type="submit" class="btn btn-danger" value="Remove Image" formnovalidate />
+            <div class="mb-3">
+                <partial name="_Images" model="image" />
+                <br />
+                <button type="submit" asp-action="removeImage" asp-controller="kindergarten"
+                        asp-route-imageId="@image.ImageId"
+                        asp-route-kindergartenId="@Model.Id"
+                        class="btn btn-danger btn-sm mt-2" formnovalidate>
+                    Remove Image
+                </button>
+            </div>
         }
     </div>
-
+    
     <hr />
     <br />
 
     @if (Model.Id.HasValue)
     {
-        <input asp-action="update" asp-controller="kindergarten" type="submit" class="btn btn-success" value="Update" />
+        <input asp-action="Update" asp-controller="Kindergarten" type="submit" class="btn btn-success" value="Update" />
     }
     else
     {
-        <input asp-action="create" asp-controller="kindergarten" type="submit" class="btn btn-success" value="Create" />
+        <input asp-action="Create" asp-controller="Kindergarten" type="submit" class="btn btn-success" value="Create" />
     }
 
-    <a asp-action="Index" asp-controller="kindergarten" class="btn btn-secondary">Back to List</a>
+    <a asp-action="Index" asp-controller="Kindergarten" class="btn btn-secondary">Back to List</a>
 </form>
