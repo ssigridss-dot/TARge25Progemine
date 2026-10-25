@@ -121,6 +121,33 @@ namespace TARge25Shop.ApplicationServices.Services
             return null;
         }
 
+        public async Task UploadFilesToDatabase(RealEstateDto dto, RealEstate domain)
+        {
+            //toimub kontroll, kas on faile v]i ei ole
+            if (dto.Files != null && dto.Files.Count > 0)
+            {
+                //tuleb kasutada foreachi, et mitu faili ülesse laadida
+                foreach (var file in dto.Files)
+                {
+                    //teha muutuja, mis salvestab faili sisu
+                    using (var target = new MemoryStream())
+                    {
+                        FileToDatabase files = new FileToDatabase()
+                        {
+                            Id = Guid.NewGuid(),
+                            ImageTitle = file.FileName,
+                            RealEstateId = domain.Id
+                        };
+
+                        file.CopyTo(target);
+                        files.ImageData = target.ToArray();
+
+                        await _context.FileToDatabases.AddAsync(files);
+                    }
+                }
+            }
+        }
+
         public async Task UploadFilesToDatabase(KindergartenDto dto, Kindergarten domain)
         {
             // Toimub kontroll, kas on faile või ei ole
