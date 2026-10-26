@@ -12,8 +12,8 @@ using TARge25Shop.Data;
 namespace TARge25Shop.Data.Migrations
 {
     [DbContext(typeof(TARge25ShopContext))]
-    [Migration("20261012204130_AddKindergarten")]
-    partial class AddKindergarten
+    [Migration("20261026141306_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,15 +34,35 @@ namespace TARge25Shop.Data.Migrations
                     b.Property<string>("ExistingFilePath")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("KindergartenId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid?>("SpaceshipId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.ToTable("FileToApis");
+                });
+
+            modelBuilder.Entity("TARge25Shop.Core.Domain.FileToDatabase", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<byte[]>("ImageData")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("ImageTitle")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("KindergartenId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("RealEstateId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FileToDatabases");
                 });
 
             modelBuilder.Entity("TARge25Shop.Core.Domain.Kindergarten", b =>
