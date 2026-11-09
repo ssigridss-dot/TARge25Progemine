@@ -20,11 +20,15 @@ namespace TARge25Shop
             builder.Services.AddScoped<IKindergartenServices, KindergartenServices>();
             builder.Services.AddHttpClient<IChuckNorrisServices, ChuckNorrisServices>();
             builder.Services.AddHttpClient<ICocktailServices, CocktailServices>();
+            //builder.Services.AddScoped<IEmailServices, EmailServices>
 
             //on vaja alla laadida Microsoft.EntityFrameworkCore.SqlServer NuGet pakett,
             //et kasutada UseSqlServer meetodit
             builder.Services.AddDbContext<TARge25ShopContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            app.Services.AddUseSecrets(AssemblyLoadEventArgs.GetExecutingAssembly())
+                .AddEnvironmentVariables();
 
             var app = builder.Build();
 
